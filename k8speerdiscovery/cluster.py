@@ -1,8 +1,8 @@
 import asyncio
 from typing import Optional, Callable, Awaitable
 
-from migdalor.discovery import NodeDiscovery, NodeAddress
-from migdalor.logger import logger
+from k8speerdiscovery.discovery import NodeDiscovery, NodeAddress
+from k8speerdiscovery.logger import logger
 
 ClusterListener = Callable[[set[NodeAddress]], Awaitable[None]]
 

@@ -3,16 +3,16 @@ from typing import Optional
 
 import httpx as httpx
 
-import migdalor
+import k8speerdiscovery
 from cluster.node.client import NodeClient
 from cluster.node.logger import logger
 
 
 class FriendsManager:
-    def __init__(self, node_address: migdalor.NodeAddress, cluster_address: migdalor.NodeAddress) -> None:
-        self._cluster = migdalor.Cluster(
+    def __init__(self, node_address: k8speerdiscovery.NodeAddress, cluster_address: k8speerdiscovery.NodeAddress) -> None:
+        self._cluster = k8speerdiscovery.Cluster(
             node_address=(node_address),
-            discovery=migdalor.KubernetesServiceDiscovery(service_address=cluster_address),
+            discovery=k8speerdiscovery.KubernetesServiceDiscovery(service_address=cluster_address),
             nodes_added_handlers=[self._on_nodes_added],
             nodes_removed_handlers=[self._on_nodes_removed],
             update_every_secs=10,
@@ -21,7 +21,7 @@ class FriendsManager:
         self._greet_task: Optional[asyncio.Task] = None
 
     @property
-    def friends(self) -> list[migdalor.NodeAddress]:
+    def friends(self) -> list[k8speerdiscovery.NodeAddress]:
         return self._cluster.other_nodes + [self._cluster.current_node]
 
     async def greet_friends(self) -> None:
@@ -62,10 +62,10 @@ class FriendsManager:
 
         return moods
 
-    async def add_friend(self, node: migdalor.NodeAddress) -> None:
+    async def add_friend(self, node: k8speerdiscovery.NodeAddress) -> None:
         await self._cluster.add(node)
 
-    async def remove_friend(self, node: migdalor.NodeAddress) -> None:
+    async def remove_friend(self, node: k8speerdiscovery.NodeAddress) -> None:
         await self._cluster.remove(node)
 
     async def start(self) -> None:
@@ -96,8 +96,8 @@ class FriendsManager:
 
         await self.greet_friends()
 
-    async def _on_nodes_added(self, nodes: set[migdalor.NodeAddress]) -> None:
+    async def _on_nodes_added(self, nodes: set[k8speerdiscovery.NodeAddress]) -> None:
         logger.info(f"{self._cluster.current_node} nodes added ({nodes})")
 
-    async def _on_nodes_removed(self, nodes: set[migdalor.NodeAddress]) -> None:
+    async def _on_nodes_removed(self, nodes: set[k8speerdiscovery.NodeAddress]) -> None:
         logger.info(f"{self._cluster.current_node} nodes removed ({nodes})")

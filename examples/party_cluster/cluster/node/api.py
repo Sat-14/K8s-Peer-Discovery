@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="The Party Cluster",
-    description="An example of using Migdalor to implement peer discovery in Kubernetes cluster",
+    description="An example of using k8speerdiscovery to implement peer discovery in Kubernetes cluster",
     lifespan=lifespan,
 )
 

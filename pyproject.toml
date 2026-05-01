@@ -1,6 +1,6 @@
 
 [project]
-name = "migdalor"
+name = "k8speerdiscovery"
 description = "A cluster membership library for modern asyncio Python distributed systems running in Kubernetes"
 authors = [
     {name = "Roman Glushko", email = "roman.glushko.m@gmail.com"},
@@ -34,15 +34,15 @@ classifiers = [
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "https://github.com/roma-glushko/migdalor"
-Source = "https://github.com/roma-glushko/migdalor"
+Homepage = "https://github.com/roma-glushko/k8speerdiscovery"
+Source = "https://github.com/roma-glushko/k8speerdiscovery"
 
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.pdm]
-version = { source = "file", path = "migdalor/__version__.py" }
+version = { source = "file", path = "k8speerdiscovery/__version__.py" }
 
 [tool.pdm.dev-dependencies]
 dev = [

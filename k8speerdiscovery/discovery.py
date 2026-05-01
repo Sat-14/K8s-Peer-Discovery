@@ -1,7 +1,7 @@
 import asyncio
 import socket
 
-from migdalor.logger import logger
+from k8speerdiscovery.logger import logger
 
 NodeAddress = tuple[str, int]
 RawNodeAddress = tuple[socket.AddressFamily, socket.SocketKind, int, str, NodeAddress]

@@ -1,14 +1,14 @@
 from pydantic.main import BaseModel
 
-import migdalor
+import k8speerdiscovery
 
 
 class DiscoveryRequest(BaseModel):
-    node: migdalor.NodeAddress
+    node: k8speerdiscovery.NodeAddress
 
 
 class NodeList(BaseModel):
-    nodes: list[migdalor.NodeAddress]
+    nodes: list[k8speerdiscovery.NodeAddress]
 
 
 class MoodResponse(BaseModel):

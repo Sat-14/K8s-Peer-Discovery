@@ -1,9 +1,9 @@
 # The Party Cluster
 
-An example of using Migdalor to implement peer discovery in Kubernetes cluster.
+An example of using k8speerdiscovery to implement peer discovery in Kubernetes cluster.
 
 The Party Cluster simulates a little party where friends (or nodes) can come and go.
-Each node is an HTTP server with some state and an ability to discover the rest of peers in the cluster thanks to Migdalor. 
+Each node is an HTTP server with some state and an ability to discover the rest of peers in the cluster thanks to k8speerdiscovery. 
 Once a new node is up and running, it discovers all other active nodes and send them the hey request. 
 This is an example of propagating membership information as soon as possible on the communication protocol level.
 
@@ -39,7 +39,7 @@ make api-docs
 ```
 
 <p align="center">
-<img src="/examples/party_cluster/docs/party-cluster-node-api.png" width="100%" alt="The Party Cluster - An example of using Migdalor to implement peer discovery in Kubernetes cluster" />
+<img src="/examples/party_cluster/docs/party-cluster-node-api.png" width="100%" alt="The Party Cluster - An example of using k8speerdiscovery to implement peer discovery in Kubernetes cluster" />
 </p>
 
 Additionally, you can find a Postman API collection in the `docs` directory.

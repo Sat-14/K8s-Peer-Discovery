@@ -1,10 +1,10 @@
 <p align="center">
-<img src="https://github.com/roma-glushko/migdalor/blob/main/docs/imgs/logo-wide.png?raw=true" width="100%" alt="Migdalor - a Kubernetes native cluster management for modern Python" />
+<img src="https://github.com/roma-glushko/k8speerdiscovery/blob/main/docs/imgs/logo-wide.png?raw=true" width="100%" alt="k8speerdiscovery - a Kubernetes native cluster management for modern Python" />
 </p>
 
 # K8s-Peer-Discovery
 
-**K8s-Peer-Discovery** (formerly Migdalor) is a cluster membership library for modern asyncio Python distributed systems running in Kubernetes.
+**K8s-Peer-Discovery** (formerly k8speerdiscovery) is a cluster membership library for modern asyncio Python distributed systems running in Kubernetes.
 
 It doesn't require a separate broker (e.g. Redis, etcd, Zookeeper, Chubby, etc) to work, but leverages Kubernetes out-of-the-box capabilities to solve the peer discovery problem.
 
@@ -43,11 +43,11 @@ pip install midgalor
 ## Usage
 
 ```python
-import migdalor
+import k8speerdiscovery
 
-cluster = migdalor.Cluster(
+cluster = k8speerdiscovery.Cluster(
     node_address=(node_address),  # the current node address (e.g. 127.0.0.1:8001)
-    discovery=migdalor.KubernetesServiceDiscovery(service_address=cluster_address), # Kubernetes headless service address (e.g. cluster:8000)
+    discovery=k8speerdiscovery.KubernetesServiceDiscovery(service_address=cluster_address), # Kubernetes headless service address (e.g. cluster:8000)
     ## Callbacks on different events
     # nodes_added_handlers=[...] 
     # nodes_removed_handlers=[...],
