@@ -1,4 +1,4 @@
-# 🔭 K8s-Peer-Discovery: Brokerless Kubernetes Networking
+#  K8s-Peer-Discovery: Brokerless Kubernetes Networking
 
 Hey there! Welcome to **K8s-Peer-Discovery**. 
 
@@ -8,7 +8,7 @@ I thought: *Why add extra infrastructure when Kubernetes already knows where eve
 
 This library solves that problem. It uses native Kubernetes Headless Services to let your asyncio Python applications discover each other directly—no brokers required!
 
-## 💡 How It Works (The Sequence)
+##  How It Works (The Sequence)
 
 It's surprisingly simple under the hood. Here is a sequence diagram showing how a new application node finds its friends using just standard DNS:
 
@@ -17,9 +17,9 @@ sequenceDiagram
     %% Friendly styling
     autonumber
     
-    participant Node1 as 🐍 App Node 1
-    participant DNS as 🌐 K8s Core DNS
-    participant Node2 as 🐍 App Node 2
+    participant Node1 as  App Node 1
+    participant DNS as  K8s Core DNS
+    participant Node2 as  App Node 2
     
     Note over Node1,DNS: Node 1 boots up and needs to find peers
     Node1->>DNS: "Hey DNS, who else is in the 'my-app' cluster?"
@@ -31,7 +31,7 @@ sequenceDiagram
     Node2-->>Node1: "Hello Node 1! Syncing now."
 ```
 
-## ✨ Key Benefits
+##  Key Benefits
 
 - **Zero Extra Infrastructure**: You don't have to manage or pay for a Redis/Zookeeper cluster.
 - **Pythonic & Modern**: Built specifically for modern `asyncio` workflows.
