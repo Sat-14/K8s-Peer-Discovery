@@ -1,40 +1,36 @@
-#  K8s-Peer-Discovery: Brokerless Kubernetes Networking
+# K8s-Peer-Discovery: Brokerless Kubernetes Networking
 
-Hey there! Welcome to **K8s-Peer-Discovery**. 
+Welcome to K8s-Peer-Discovery. 
 
-When building distributed Python systems in Kubernetes, you often need the different instances (nodes) of your app to talk to each other. Usually, developers add a heavy message broker like Redis, RabbitMQ, or ZooKeeper just to let the nodes know they exist. 
+When designing distributed systems in Kubernetes using Python's `asyncio`, it is often necessary for pods (nodes) to discover and communicate with their peers. A common anti-pattern is to introduce a heavyweight external message broker (like Redis, ZooKeeper, or etcd) solely to manage cluster membership. K8s-Peer-Discovery eliminates this dependency by directly querying the Kubernetes CoreDNS via Headless Services.
 
-I thought: *Why add extra infrastructure when Kubernetes already knows where everything is?*
+## Technical Architecture & Peer Resolution
 
-This library solves that problem. It uses native Kubernetes Headless Services to let your asyncio Python applications discover each other directly—no brokers required!
-
-##  How It Works (The Sequence)
-
-It's surprisingly simple under the hood. Here is a sequence diagram showing how a new application node finds its friends using just standard DNS:
+The library relies on the fact that a Kubernetes Headless Service (a service with `clusterIP: None`) returns multiple `A` records in response to a DNS query—one for each active pod backing the service.
 
 ```mermaid
 sequenceDiagram
-    %% Friendly styling
     autonumber
     
-    participant Node1 as  App Node 1
-    participant DNS as  K8s Core DNS
-    participant Node2 as  App Node 2
+    participant Pod1 as Asyncio Pod 1
+    participant DNS as K8s CoreDNS
+    participant Pod2 as Asyncio Pod 2
     
-    Note over Node1,DNS: Node 1 boots up and needs to find peers
-    Node1->>DNS: "Hey DNS, who else is in the 'my-app' cluster?"
-    DNS-->>Node1: "I found IPs: 10.0.1.5, 10.0.1.6"
+    Note over Pod1,DNS: Pod 1 boots and initializes K8s-Peer-Discovery
+    Pod1->>DNS: UDP Query A Record for "headless-svc.default.svc.cluster.local"
+    DNS-->>Pod1: Response: [10.244.1.5, 10.244.2.8]
     
-    Note over Node1: Node 1 updates its internal peer list
+    Note over Pod1: Internal state synced. Peer IPs identified.
     
-    Node1->>Node2: "Hi Node 2! Let's sync data directly."
-    Node2-->>Node1: "Hello Node 1! Syncing now."
+    Pod1->>Pod1: Trigger `nodes_added` event hooks
+    Pod1->>Pod2: Establish direct gRPC / WebSocket connection
 ```
 
-##  Key Benefits
+## Key Technical Details
 
-- **Zero Extra Infrastructure**: You don't have to manage or pay for a Redis/Zookeeper cluster.
-- **Pythonic & Modern**: Built specifically for modern `asyncio` workflows.
-- **Event-Driven**: You can easily hook into events (e.g., trigger a function when a new node joins or leaves).
+- **Brokerless Design**: Completely removes the requirement for a centralized registry to manage the state of your cluster. Your pods remain entirely stateless and rely on the infrastructure's source of truth.
+- **Asyncio Native Polling**: The library utilizes non-blocking UDP DNS resolution (`aiodns`) to periodically poll the headless service for changes in the A records.
+- **Event-Driven Hooks**: Provides a straightforward API to register asynchronous callbacks for `nodes_added` and `nodes_removed` events. This allows you to dynamically spin up or tear down connections (e.g., gRPC channels or Redis PubSub links) precisely when the cluster topology changes.
+- **Manual Overrides**: In advanced deployment scenarios, you can bypass the Kubernetes Service Discovery implementation and manage the cluster membership manually through the API.
 
-Whether you're building a chat server, a multiplayer game backend, or a distributed cache, this library keeps your deployment extremely lean.
+This library is particularly effective for orchestrating distributed state machines, establishing peer-to-peer WebRTC signaling networks, or managing decentralized caching layers within a Kubernetes cluster.
